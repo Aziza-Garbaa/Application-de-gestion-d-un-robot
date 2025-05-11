@@ -11,6 +11,7 @@ public abstract class Robot {
     private int energie;//l'energie varie de 0 à 100
     private int heuresUtilisation;
     private boolean enMarche;
+    private boolean modeeco=false;
     private List<String> historiqueActions;
     public Robot(String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche) {
         this.id = id;
@@ -111,6 +112,10 @@ public abstract class Robot {
             this.arreter();
             throw new EnergieInsuffisanteException("Energie insuffisante pour Effectuer cette opération .le robot est maintenant éteint.");
         }
+        if(modeeco) {
+            energieConsommé = (int) (energieConsommé * 0.8); 
+            ajouterHistorique("Mode écologique activé. Consommation d'énergie réduite de 20 %.");
+        }
         energie -= energieConsommé;
         ajouterHistorique("Le robot a consommé " + energieConsommé + " % d'énergie. Energie restante: " + energie + " %.");
     } 
@@ -146,6 +151,31 @@ public abstract class Robot {
         return "RobotIndustriel [ID :"+id+" , Position : (" + x +","+y+"), Energie : "+energie+"%, Heures : "+heuresUtilisation+"]";
     }
 
+
+    public boolean isModeeco() {
+        return modeeco;
+    }
+    public void setModeeco(boolean modeeco) {
+        this.modeeco = modeeco;
+    }
+    public void activerModeEco() throws RobotException{
+        if (modeeco) {
+            ajouterHistorique("Echec d'activation du mode écologique: le mode écologique est déjà activé.");
+            throw new RobotException("Echec d'activation du mode écologique: le mode écologique est déjà activé.");
+        }
+        modeeco = true;
+        ajouterHistorique("Mode écologique activé.");
+    }
+    public void desactiverModeEco() throws RobotException{
+        if (!modeeco) {
+            ajouterHistorique("Echec de désactivation du mode éco: le mode éco est déjà désactivé.");
+            throw new RobotException("Echec de désactivation du mode éco: le mode éco est déjà désactivé.");
+        }
+        modeeco = false;
+        ajouterHistorique("Mode éco désactivé.");
+    }
+
+    
 
 
 }

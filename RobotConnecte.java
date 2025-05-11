@@ -29,6 +29,7 @@ public abstract class RobotConnecte extends Robot implements Connectable {
     }
   @Override
   public void connecter(String reseau)throws RobotException {
+    
     verifierMaintenance();
     if(verifierEnergie(5)){
         

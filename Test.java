@@ -52,6 +52,12 @@ public class Test {
                     case 10:
                         robot.effectuerTache();
                         break;
+                    case 11:
+                        robot.activerModeEco();
+                        break;
+                    case 12:
+                        robot.desactiverModeEco();
+                        break;
                     case 0:
                         quitter = true;
                         System.out.println("Au revoir!");
@@ -83,6 +89,8 @@ public class Test {
         System.out.println("8. Recharger la batterie");
         System.out.println("9. Afficher l'historique");
         System.out.println("10. Effectuer tâche (interactif)");
+        System.out.println("11. Activer mode ecologique");
+        System.out.println("12. Désactiver mode ecologique");
         System.out.println("0. Quitter");
         System.out.print("Votre choix: ");
     }
@@ -95,13 +103,9 @@ public class Test {
     }
     
     private static void effectuerLivraison() throws RobotException {
-        System.out.print("Entrez coordonnée X: ");
-        int x = scanner.nextInt();
-        System.out.print("Entrez coordonnée Y: ");
-        int y = scanner.nextInt();
-        scanner.nextLine(); // Consommer le retour à la ligne
-        robot.FaireLivraison(x, y);
-        System.out.println("Livraison effectuée aux coordonnées (" + x + "," + y + ")");
+        
+        robot.FaireLivraison();
+        System.out.println("Livraison effectuée aux coordonnées (" + robot.getX() + "," + robot.getY() + ")");
     }
     
     private static void connecterRobot() throws RobotException {
@@ -125,5 +129,6 @@ public class Test {
         robot.recharger(quantite);
         System.out.println("Robot rechargé de " + quantite + "%");
     }
+
 }
     
