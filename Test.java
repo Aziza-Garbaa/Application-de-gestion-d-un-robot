@@ -10,6 +10,7 @@ public class Test {
         System.out.print("Entrez l'ID du robot: ");
         String id = scanner.nextLine();
         robot = new RobotLivraison(id, 0, 0);
+        new Thread(robot).start();
         
         boolean quitter = false;
         while (!quitter) {

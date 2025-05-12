@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,7 @@ public abstract class Robot {
     private int heuresUtilisation;
     private boolean enMarche;
     private boolean modeeco=false;
+    private int puissance;
     private List<String> historiqueActions;
     public Robot(String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche) {
         this.id = id;
@@ -22,6 +24,18 @@ public abstract class Robot {
         this.enMarche = EnMarche;
         this.historiqueActions = new ArrayList<>();
         ajouterHistorique("Robot créé");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Combien voulez-vous de puissance pour le robot ? (1-10 KWh)");
+        this.puissance = scanner.nextInt();
+        
+        if (this.puissance < 1 || this.puissance > 10) {
+            System.out.println("Puissance invalide. La puissance doit être comprise entre 1 et 10 KWh.");
+            System.out.println("Valeur par défaut de 1 KWh sera utilisée.");
+            this.puissance = 1; // Valeur par défaut
+        }
+       
+        ajouterHistorique("id du robot: "+id+" puissance: "+puissance+" KWh");
+
     }
     public String getId() {
         return id;
@@ -118,6 +132,7 @@ public abstract class Robot {
         }
         energie -= energieConsommé;
         ajouterHistorique("Le robot a consommé " + energieConsommé + " % d'énergie. Energie restante: " + energie + " %.");
+       
     } 
     public void recharger(int quantite) throws IllegalArgumentException{
         if (quantite < 0) {
@@ -174,6 +189,23 @@ public abstract class Robot {
         modeeco = false;
         ajouterHistorique("Mode éco désactivé.");
     }
+    public int getPuissance() {
+        return puissance;
+    }
+    public void setPuissance(int puissance) {
+        this.puissance = puissance;
+    }
+    public double co2degagé() {
+        
+        double consommation_electrique= this.puissance * this.heuresUtilisation/1000.0;
+        return consommation_electrique * 475; //En Tunisie, le facteur d'émission du réseau électrique (CO₂ par kWh) est entre 450-500 CO₂/kWh
+    }
+    
+    
+    
+
+
+
 
     
 

@@ -17,6 +17,7 @@ public class RobotLivraison extends RobotConnecte {
         this.colisActuel = "0";// colisAcuel normalement une description de colis mais il contient un entier
         this.destination = null;
         this.enlivraison = false;
+        this.setPortenvoie("shutdown");
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -232,9 +233,9 @@ public class RobotLivraison extends RobotConnecte {
     public String toString() {
         String destString = this.destination != null ? this.destination.split(" et ")[0] : "Aucune destination";
         String reponse = isConnecte() ? "Oui" : "Non";
-        return "RobotIndustriel [ID :" + this.getId() + " , Position : (" + this.getX() + "," + this.getY()
+        return "RobotIndustriel [ID :" + this.getId() +" , Puissance :"+this.getPuissance()+ " , Position : (" + this.getX() + "," + this.getY()
                 + "), Energie : " + this.getEnergie() + "% , Heures : " + this.getHeuresUtilisation() + ", Colis: "
-                + colisActuel + ", Destination : " + destString + ", Connecté : " + reponse + ", mode ecologique : " + isModeeco()+"]";
+                + colisActuel + ", Destination : " + destString + ", Connecté : " + reponse + " ,Etat du port: "+ getPortenvoie()+" , mode ecologique : " + isModeeco()+" ,Co2 degagé: "+co2degagé()+"g ]";
 
     }
 
