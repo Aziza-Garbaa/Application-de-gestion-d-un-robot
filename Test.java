@@ -114,6 +114,7 @@ JPanel gauche = new JPanel(new BorderLayout());
                 grille.setRobotPosition(0, 0);
 
                 JOptionPane.showMessageDialog(fen, "Robot démarré avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                 mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -124,6 +125,7 @@ JPanel gauche = new JPanel(new BorderLayout());
             try {
                 robot.arreter();
                 JOptionPane.showMessageDialog(fen, "Robot arrêté avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -135,6 +137,7 @@ JPanel gauche = new JPanel(new BorderLayout());
             if (destination != null && !destination.trim().isEmpty()) {
                 try {
                     robot.chargerColis(destination);
+                    System.out.println(robot);
                      mettreAJourHistorique(historique,robot);
                 } catch (RobotException ex) {
                     JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -148,6 +151,7 @@ JPanel gauche = new JPanel(new BorderLayout());
                 grille.setRobotPosition(robot.getX(), robot.getY());
 
                 JOptionPane.showMessageDialog(fen, "Livraison effectuée aux coordonnées (" + robot.getX() + "," + robot.getY() + ")", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -160,6 +164,7 @@ JPanel gauche = new JPanel(new BorderLayout());
                 try {
                     robot.connecter(reseau);
                     JOptionPane.showMessageDialog(fen, "Robot connecté au réseau " + reseau, "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println(robot);
                      mettreAJourHistorique(historique,robot);
                 } catch (RobotException ex) {
                     JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -171,6 +176,7 @@ JPanel gauche = new JPanel(new BorderLayout());
            
                 robot.deconnecter();
                 JOptionPane.showMessageDialog(fen, "Robot déconnecté.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
            
         });
@@ -181,6 +187,7 @@ JPanel gauche = new JPanel(new BorderLayout());
                 try {
                     robot.envoyerDonnees(donnees);
                     JOptionPane.showMessageDialog(fen, "Données envoyées avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println(robot);
                      mettreAJourHistorique(historique,robot);
                 } catch (RobotException ex) {
                     JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -194,6 +201,7 @@ JPanel gauche = new JPanel(new BorderLayout());
                 try {
                     int quantite = Integer.parseInt(quantiteStr);
                     robot.recharger(quantite);
+                    System.out.println(robot);
                      mettreAJourHistorique(historique,robot);
                    
                 } catch (NumberFormatException ex) {
@@ -208,7 +216,7 @@ JPanel gauche = new JPanel(new BorderLayout());
             try {
                 robot.effectuerTache();
                 grille.setRobotPosition(robot.getX(), robot.getY());
-
+System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -219,6 +227,7 @@ JPanel gauche = new JPanel(new BorderLayout());
             try {
                 robot.activerModeEco();
                 JOptionPane.showMessageDialog(fen, "Mode écologique activé.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -229,6 +238,7 @@ JPanel gauche = new JPanel(new BorderLayout());
             try {
                 robot.desactiverModeEco();
                 JOptionPane.showMessageDialog(fen, "Mode normal activé.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(robot);
                  mettreAJourHistorique(historique,robot);
             } catch (RobotException ex) {
                 JOptionPane.showMessageDialog(fen, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
