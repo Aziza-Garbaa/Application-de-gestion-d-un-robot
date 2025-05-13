@@ -1,6 +1,10 @@
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +19,7 @@ public abstract class Robot {
     private boolean modeeco=false;
     private int puissance;
     private List<String> historiqueActions;
-    public Robot(String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche) {
+    public Robot(String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche,int puissance) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -24,15 +28,10 @@ public abstract class Robot {
         this.enMarche = EnMarche;
         this.historiqueActions = new ArrayList<>();
         ajouterHistorique("Robot créé");
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Combien voulez-vous de puissance pour le robot ? (1-10 KWh)");
-        this.puissance = scanner.nextInt();
         
-        if (this.puissance < 1 || this.puissance > 10) {
-            System.out.println("Puissance invalide. La puissance doit être comprise entre 1 et 10 KWh.");
-            System.out.println("Valeur par défaut de 1 KWh sera utilisée.");
-            this.puissance = 1; // Valeur par défaut
-        }
+        this.puissance = puissance;
+        
+       
        
         ajouterHistorique("id du robot: "+id+" puissance: "+puissance+" KWh");
 
@@ -140,10 +139,14 @@ public abstract class Robot {
             throw new IllegalArgumentException("La quantité d'énergie à recharger doit être positive.");
         }
         if (energie + quantite > 100) {
-            energie = 100;
+                   JFrame fen = new JFrame();
+                   
+             JOptionPane.showMessageDialog(fen, "Robot rechargé à 100%", "Succès", JOptionPane.INFORMATION_MESSAGE);
             ajouterHistorique("Le robot est complètement rechargé à 100 % d'énergie.");
         } else {
             energie += quantite;
+            JFrame fen=new JFrame();
+             JOptionPane.showMessageDialog(fen, "Robot rechargé de " + quantite + "%", "Succès", JOptionPane.INFORMATION_MESSAGE);
             ajouterHistorique("Le robot a été rechargé de " + quantite + " % d'énergie. Energie actuelle: " + energie + " %.");
         }
     }
@@ -198,7 +201,9 @@ public abstract class Robot {
     public double co2degagé() {
         
         double consommation_electrique= this.puissance * this.heuresUtilisation/1000.0;
+        ajouterHistorique("co2 degagé jusqu'à ce moment là est : "+consommation_electrique*475+" g");
         return consommation_electrique * 475; //En Tunisie, le facteur d'émission du réseau électrique (CO₂ par kWh) est entre 450-500 CO₂/kWh
+        
     }
     
     

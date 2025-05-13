@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class RobotLivraison extends RobotConnecte {
     private String colisActuel;
@@ -12,8 +14,8 @@ public class RobotLivraison extends RobotConnecte {
     private static final int ENERGIE_LIVRAISON = 15;
     private static final int ENERGIE_CHARGEMENT = 5;
 
-    public RobotLivraison(String id, int x, int y) {
-        super(id, x, y, 100, 0, false);
+    public RobotLivraison(String id, int x, int y,int puissance) {
+        super(id, x, y, 100, 0, false,puissance);
         this.colisActuel = "0";// colisAcuel normalement une description de colis mais il contient un entier
         this.destination = null;
         this.enlivraison = false;
@@ -24,6 +26,7 @@ public class RobotLivraison extends RobotConnecte {
 
     @Override
     public void effectuerTache() throws RobotException {
+         JFrame fen = new JFrame();
         if (!isEnMarche()) {
             throw new RobotException("Le robot doit etre demarré pour effectuer une tache.");
 
@@ -38,13 +41,15 @@ public class RobotLivraison extends RobotConnecte {
             }
             
             // Demander si l'utilisateur veut ajouter un colis
-            System.out.println("Voulez-vous charger un nouveau colis? (oui/non)");
-            String reponse = scanner.nextLine();
+           
+           String reponse =JOptionPane.showInputDialog(fen, "Voulez-vous charger un nouveau colis? (oui/non)");
+            
+            
             
             
             if(reponse.equalsIgnoreCase("oui")) {
-                System.out.println("Entrez la destination du colis : ");
-                String dest = scanner.nextLine();
+                
+                String dest =JOptionPane.showInputDialog(fen, "Entrer la destination du colis");
                // scanner.nextLine(); // consommer le retour à la ligne
                 
                
@@ -57,38 +62,53 @@ public class RobotLivraison extends RobotConnecte {
        
        
         if (enlivraison) {
+            int b= JOptionPane.showConfirmDialog(fen, "Colis livré");
+            if(b==0){
             FaireLivraison(xdest.get(0),ydest.get(0));
-
+            JOptionPane.showMessageDialog(fen, "colis livré avec succès");
+            return;}
+            else if(b==1){colisActuel = Integer.toString(Integer.parseInt(colisActuel) -1);
+            if(destination!= null && destination.contains(" et ")){
+                String [] destinations=this.destination.split(" et ",2);
+                this.destination=destinations[1];}
+                else destination="";
+                xdest.remove(xdest.size()-1);
+                ydest.remove(ydest.size()-1);
+                JOptionPane.showMessageDialog(fen, "annulation de livraison ");
+                return;
+            }
+           
+            return;
         } 
         
-            System.out.println("Veuillez charger un nouveau colis(oui/non).");
+           // System.out.println("Veuillez charger un nouveau colis(oui/non).");
             boolean reponseValidee = false;
             while (!reponseValidee) {
-                String reponse = scanner.nextLine();
+                String reponse =JOptionPane.showInputDialog(fen, "Voulez-vous charger un nouveau colis? (oui/non)");
                 if (reponse.equalsIgnoreCase("oui")) {
                     if (verifierEnergie(ENERGIE_CHARGEMENT)) {
-                        System.out.println("Veuillez entrer la destination du colis : ");
+                        //System.out.println("Veuillez entrer la destination du colis : ");
                         
-                        String dest = scanner.nextLine();
+                       String dest =JOptionPane.showInputDialog(fen, "Entrer la destination du colis");
                        
                         chargerColis(dest);
-                        System.out.println("Colis chargé avec succès.");
+                        
                         FaireLivraison();
-                        System.out.println("Colis livré avec succès.");
+                        JOptionPane.showMessageDialog(fen, "Colis livrés avec succès.");
                         reponseValidee = true;
 
                     }
                     else {
-                        System.out.println("Energie insuffisante pour charger le colis.");
+                        JOptionPane.showMessageDialog(fen, "Energie insuffisante pour charger le colis.");
                         reponseValidee = true;
                     }
 
                 } else if (reponse.equalsIgnoreCase("non")) {
-                    System.out.println("Aucun colis à charger.");
+                    JOptionPane.showMessageDialog(fen, "Aucun colis à charger.");
                     ajouterHistorique("En attente de colis.");
                     reponseValidee = true;
                 } else {
-                    System.out.println("Réponse invalide. Veuillez entrer 'oui' ou 'non'.");
+                    JOptionPane.showMessageDialog(fen, "Réponse invalide. Veuillez répondre par 'oui' ou 'non'.");
                 }
             }
             
@@ -118,9 +138,11 @@ public class RobotLivraison extends RobotConnecte {
         if (verifierEnergie(ENERGIE_LIVRAISON)) {
             for(int i=0;i<xdest.size();i++){
                 deplacer(xdest.get(i), ydest.get(i));
+                 
                 this.colisActuel = Integer.toString(Integer.parseInt(this.colisActuel) - 1);
                 if(destination!= null && destination.contains(" et ")){
-                String [] destinations=this.destination.split(" et ",2);
+                String [] destinations=this.destination.split(" et ",100);
+                 ajouterHistorique("Livraison terminée à " + destinations[i]);
                 this.destination=destinations[1];}
             }
             xdest.clear();
@@ -159,28 +181,36 @@ public class RobotLivraison extends RobotConnecte {
     }
 
     public void chargerColis(String destination) throws RobotException {
-        if (!enlivraison ) {
+        JFrame fen = new JFrame();
+        if (!enlivraison ) 
+        {
             if (this.colisActuel.equals("0")) {
-
+                
                 if (verifierEnergie(ENERGIE_CHARGEMENT)) {
                     colisActuel = "1";
                     this.destination = destination;
                     int xdestination;
                 int ydestination;
-                System.out.println("Entrez la coordonnée x de la destination : ");
-                xdestination = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Entrez la coordonnée y de la destination : ");
-                ydestination = scanner.nextInt();
-                scanner.nextLine();
+               xdestination = Integer.parseInt(JOptionPane.showInputDialog(fen, "Entrez la coordonnée x:"));
+                //xdestination = scanner.nextInt();
+                //scanner.nextLine();
+               // System.out.println("Entrez la coordonnée y de la destination : ");
+                //ydestination = scanner.nextInt();
+               // scanner.nextLine();
+               ydestination = Integer.parseInt(JOptionPane.showInputDialog(fen, "Entrez la coordonnée y:"));
                 xdest.add(xdestination);
                 ydest.add(ydestination);
-                System.out.println("Colis chargé avec succès en attente d'autre chargements.");
+                 JOptionPane.showMessageDialog(fen, "Colis chargé avec succès à la destination :"+destination);
+                 ajouterHistorique("Colis chargé à "+destination);
+                 if(!isModeeco()){ this.enlivraison=true; return;}
+              
             
             
             }
                 else{
-                    System.out.println("Energie insuffisante pour charger le colis.");
+                   JOptionPane.showMessageDialog(fen, "Energie insuffisante pour charger le colis.");
+                
+                 
                 }
 
             }
@@ -190,12 +220,8 @@ public class RobotLivraison extends RobotConnecte {
                     
                 int xdestination;
                 int ydestination;
-                System.out.println("Entrez la coordonnée x de la destination : ");
-                xdestination = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Entrez la coordonnée y de la destination : ");
-                ydestination = scanner.nextInt();
-                scanner.nextLine();
+                xdestination = Integer.parseInt(JOptionPane.showInputDialog(fen, "Entrez la coordonnée x:"));
+                 ydestination = Integer.parseInt(JOptionPane.showInputDialog(fen, "Entrez la coordonnée y:"));
                 
                 if(xdest.isEmpty() || ydest.isEmpty() || regrouper(xdest.get(xdest.size()-1),xdestination,ydest.get(ydest.size()-1),ydestination)){
                     this.destination = this.destination+" et "+destination;
@@ -204,18 +230,30 @@ public class RobotLivraison extends RobotConnecte {
                     colisActuel = Integer.toString(Integer.parseInt(colisActuel) + 1);
                     consommerEnergie(ENERGIE_CHARGEMENT);
                     ajouterHistorique("nouvelle destination ajoutée: "+destination);
-                    System.out.println("Colis regroupé avec succès.");
+                    JOptionPane.showMessageDialog(fen, "Colis regroupé avec succès.");
+                 
+            
                 }
                 else{
-                    System.out.println("Regroupement impossible, chargement annulée.");
+                     JOptionPane.showMessageDialog(fen, "Regroupement impossible, chargement annulée.");
+                     ajouterHistorique("Regroupement impossible .Anuulation de chargement dedernier colis .");
+                
+            
+                    
                     enlivraison=true;
                     FaireLivraison();
-                    System.out.println("Colis regroupés sont livrés avec succès.");
+                     JOptionPane.showMessageDialog(fen, "Colis regroupés sont livrés avec succès.");
+                
+            
+                    
                     
                     return;
                 }}
                 else{
-                    System.out.println("Energie insuffisante pour charger le colis.");
+                     JOptionPane.showMessageDialog(fen, "Energie insuffisante pour charger le colis.");
+                 
+            
+                   
                 }
             }
                 
@@ -224,7 +262,9 @@ public class RobotLivraison extends RobotConnecte {
 
             }
             else {
-                System.out.println("Le robot est déjà en cours de livraison.");
+                 JOptionPane.showMessageDialog(fen, "Le robot est déjà en cours de livraison.");
+                
+            
             }
         }
     

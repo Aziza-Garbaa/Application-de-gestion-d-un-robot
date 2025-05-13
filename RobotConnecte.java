@@ -5,15 +5,15 @@ public abstract class RobotConnecte extends Robot implements Connectable , Runna
   private String reseauConnecte;
   private boolean envoieDonnees=false;
   private String portenvoie;
-  public RobotConnecte ( String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche,boolean connecte,String reseauConnecte) {
-    super(id,x,y,energie,heuresUtilisation,EnMarche);
+  public RobotConnecte ( String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche,boolean connecte,String reseauConnecte,int puissance) {
+    super(id,x,y,energie,heuresUtilisation,EnMarche,puissance);
     this.connecte=connecte;
     this.reseauConnecte=reseauConnecte;
     this.portenvoie="shotdown"; 
 
   }  
-  public RobotConnecte ( String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche) {
-    super(id,x,y,energie,heuresUtilisation,EnMarche);
+  public RobotConnecte ( String id, int x, int y, int energie, int heuresUtilisation, boolean EnMarche,int puissance) {
+    super(id,x,y,energie,heuresUtilisation,EnMarche,puissance);
     this.connecte=false;
     this.reseauConnecte=null;
 
